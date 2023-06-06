@@ -61,7 +61,7 @@ cvs_show() {
 		patchset="$(cvs_latest_patchset)"
 	fi
 
-	exec cvsps -g -s "${patchset}" | colordiff | less -F
+	exec cvsps -g -s "${patchset}"
 }
 
 run_adjusted_command_line() {
@@ -69,7 +69,8 @@ run_adjusted_command_line() {
 		case "$1" in
 			diff)		exec cvs "$@" | colordiff | less -F ;;
 			plaindiff)	shift; exec cvs diff "$@" ;;
-			show)		shift; cvs_show "$@" ;;
+			show)		shift; cvs_show "$@" | colordiff | less -F ;;
+			gitlog)		shift; exec cvsps "$@" | less -F +G ;;
 			*)		exec cvs "$@" ;;
 		esac
 	else
