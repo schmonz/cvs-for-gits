@@ -37,12 +37,8 @@ show_physical_path() {
 run_adjusted_command_line() {
 	if [ "$#" -gt 0 ]; then
 		case "$1" in
-			diff)
-				exec cvs "$@" | colordiff | less -F
-				;;
-			*)
-				exec cvs "$@"
-				;;
+			diff)	exec cvs "$@" | colordiff | less -F ;;
+			*)	exec cvs "$@" ;;
 		esac
 	else
 		exec cvs "$@"
@@ -50,7 +46,11 @@ run_adjusted_command_line() {
 }
 
 main() {
-	remove_ourselves_from_path
+	case "$(basename $0)" in
+		cvs)	remove_ourselves_from_path ;;
+		*)	;;
+	esac
+
 	run_adjusted_command_line "$@"
 }
 
