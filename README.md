@@ -11,7 +11,7 @@ Two options:
 
 ## Usage
 
-For most `cvs` subcommands, `cvs-for-gits` simply executes `cvs(1)`, passing along any command-line arguments.
+For most subcommands, `cvs-for-gits` simply executes `cvs(1)`, passing along any command-line arguments.
 
 ### `cvs diff`
 
