@@ -67,9 +67,10 @@ cvs_show() {
 run_adjusted_command_line() {
 	if [ "$#" -gt 0 ]; then
 		case "$1" in
-			diff)	exec cvs "$@" | colordiff | less -F ;;
-			show)	shift; cvs_show "$@" ;;
-			*)	exec cvs "$@" ;;
+			diff)		exec cvs "$@" | colordiff | less -F ;;
+			plaindiff)	shift; exec cvs diff "$@" ;;
+			show)		shift; cvs_show "$@" ;;
+			*)		exec cvs "$@" ;;
 		esac
 	else
 		exec cvs "$@"
