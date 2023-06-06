@@ -15,6 +15,8 @@ For most `cvs` subcommands, `cvs-for-gits` simply executes `cvs(1)`, passing alo
 
 For `cvs diff`, output is colorized and paged just like `git diff`. You'll need `colordiff` and `less` installed. (You might need to configure `colordiff` to use `git diff` colors.)
 
+`cvs show` works a bit like `git show`: without arguments, or with the argument `HEAD`, it shows the latest commitdiff. `cvs show HEAD^` shows the previous one, as you might expect, and `cvs show HEAD~2` the one before that. You'll need `cvsps` installed.
+
 ## Improvements
 
 If the wrapper interferes with anything you use `cvs` for, that's a bug. I'll also want to hear about `cvs` tasks we might be able to make easier.

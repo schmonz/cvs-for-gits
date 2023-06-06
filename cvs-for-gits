@@ -34,10 +34,41 @@ show_physical_path() {
 	fi
 }
 
+cvs_latest_patchset() {
+	cvsps | grep ^PatchSet | tail -1 | awk '{print $2}'
+}
+
+cvs_carets_before_head() {
+	sed -e 's|^HEAD||g' | fold -w 1 | uniq -c | head -1 | awk '{print $1}'
+}
+
+cvs_tilde_before_head() {
+	sed -e 's|^HEAD~||g'
+}
+
+cvs_show() {
+	local patchset
+
+	if [ "$#" -gt 0 ]; then
+		case "$1" in
+			HEAD^*)	patchset="$(expr $(cvs_latest_patchset) - $(echo $1 | cvs_carets_before_head))" ;;
+			HEAD~)	patchset="$(expr $(cvs_latest_patchset) - 1)" ;;
+			HEAD~*)	patchset="$(expr $(cvs_latest_patchset) - $(echo $1 | cvs_tilde_before_head))" ;;
+			HEAD)	patchset="$(cvs_latest_patchset)" ;;
+			*)	patchset="$1";;
+		esac
+	else
+		patchset="$(cvs_latest_patchset)"
+	fi
+
+	exec cvsps -g -s "${patchset}" | colordiff | less -F
+}
+
 run_adjusted_command_line() {
 	if [ "$#" -gt 0 ]; then
 		case "$1" in
 			diff)	exec cvs "$@" | colordiff | less -F ;;
+			show)	shift; cvs_show "$@" ;;
 			*)	exec cvs "$@" ;;
 		esac
 	else
