@@ -65,10 +65,13 @@ cvs_show() {
 }
 
 run_adjusted_command_line() {
+	local _pager
+	_pager='less -F'
+
 	if [ "$#" -gt 0 ]; then
 		case "$1" in
 			diff)
-				exec cvs "$@" | colordiff | less -F
+				exec cvs "$@" | colordiff | ${_pager}
 				;;
 			plaindiff)
 				shift
@@ -76,14 +79,14 @@ run_adjusted_command_line() {
 				;;
 			show)
 				shift
-				cvs_show "$@" | colordiff | less -F
+				cvs_show "$@" | colordiff | ${_pager}
 				;;
 			gitlog)
 				shift
-				exec cvsps "$@" | less -F +G
+				exec cvsps "$@" | ${_pager} +G
 				;;
 			annotate|log|status)
-				exec cvs "$@" | less -F
+				exec cvs "$@" | ${_pager}
 				;;
 			*)
 				exec cvs "$@"
