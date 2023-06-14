@@ -71,6 +71,7 @@ run_adjusted_command_line() {
 			plaindiff)	shift; exec cvs diff "$@" ;;
 			show)		shift; cvs_show "$@" | colordiff | less -F ;;
 			gitlog)		shift; exec cvsps "$@" | less -F +G ;;
+			annotate|log|status)	exec cvs "$@" | less -F ;;
 			*)		exec cvs "$@" ;;
 		esac
 	else

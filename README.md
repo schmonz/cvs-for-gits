@@ -34,6 +34,10 @@ You'll need `cvsps` and `less` installed.
 
 If newer commits aren't showing up, `cvs gitlog -x` rebuilds the commitlog cache.
 
+### `cvs annotate`, `log`, `status`
+
+Long output is paged just like `git`.
+
 ## Improvements
 
 If the wrapper interferes with anything you use `cvs` for, that's a bug. I'll also want to hear about `cvs` tasks we might be able to make easier.
