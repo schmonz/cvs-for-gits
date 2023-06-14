@@ -66,7 +66,7 @@ cvs_show() {
 
 run_adjusted_command_line() {
 	local _pager
-	_pager='less -F'
+	_pager='less -FRX'
 
 	if [ "$#" -gt 0 ]; then
 		case "$1" in
