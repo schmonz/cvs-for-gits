@@ -11,14 +11,14 @@ remove_ourselves_from_path() {
 }
 
 remove_dir_from_path() {
-	local path dir
+	local path dir trailing_colon
 	path="$1"; shift
 	dir="$1"; shift
-	echo "${path}" \
+	trailing_colon=$(echo "${path}" \
 		| tr ':' '\n' \
 		| grep -v "^${dir}\$" \
-		| tr '\n' ':' \
-		| sed -e 's|:$||'
+		| tr '\n' ':')
+	echo "${trailing_colon%:*}"
 }
 
 show_physical_path() {
@@ -65,32 +65,13 @@ cvs_show() {
 }
 
 run_adjusted_command_line() {
-	local _pager
-	_pager='less -FRX'
-
 	if [ "$#" -gt 0 ]; then
 		case "$1" in
-			diff)
-				exec cvs "$@" | colordiff | ${_pager}
-				;;
-			plaindiff)
-				shift
-				exec cvs diff "$@"
-				;;
-			show)
-				shift
-				cvs_show "$@" | colordiff | ${_pager}
-				;;
-			gitlog)
-				shift
-				exec cvsps "$@" | ${_pager} +G
-				;;
-			annotate|log|status)
-				exec cvs "$@" | ${_pager}
-				;;
-			*)
-				exec cvs "$@"
-				;;
+			diff)		exec cvs "$@" | colordiff | less -F ;;
+			plaindiff)	shift; exec cvs diff "$@" ;;
+			show)		shift; cvs_show "$@" | colordiff | less -F ;;
+			gitlog)		shift; exec cvsps "$@" | less -F +G ;;
+			*)		exec cvs "$@" ;;
 		esac
 	else
 		exec cvs "$@"
